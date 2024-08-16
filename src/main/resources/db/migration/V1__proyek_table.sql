@@ -1,5 +1,5 @@
 CREATE TABLE proyek(
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     nama_proyek VARCHAR(255) NOT NULL,
     client VARCHAR(255) NOT NULL ,
     tgl_mulai DATETIME NOT NULL ,

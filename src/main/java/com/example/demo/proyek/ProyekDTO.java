@@ -2,13 +2,14 @@ package com.example.demo.proyek;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class ProyekDTO {
     private int id;
     private String NamaProyek;
     private String Client;
-    private Date TanggalMulai;
-    private Date TanggalSelesai;
+    private LocalDateTime TanggalMulai;
+    private LocalDateTime TanggalSelesai;
     private String PimpinanProyek;
     private String Keterangan;
     private Timestamp CreatedAt;
@@ -38,19 +39,19 @@ public class ProyekDTO {
         Client = client;
     }
 
-    public Date getTanggalMulai () {
+    public LocalDateTime getTanggalMulai () {
         return TanggalMulai;
     }
 
-    public void setTanggalMulai (Date tanggalMulai) {
+    public void setTanggalMulai (LocalDateTime tanggalMulai) {
         TanggalMulai = tanggalMulai;
     }
 
-    public Date getTanggalSelesai () {
+    public LocalDateTime getTanggalSelesai () {
         return TanggalSelesai;
     }
 
-    public void setTanggalSelesai (Date tanggalSelesai) {
+    public void setTanggalSelesai (LocalDateTime tanggalSelesai) {
         TanggalSelesai = tanggalSelesai;
     }
 

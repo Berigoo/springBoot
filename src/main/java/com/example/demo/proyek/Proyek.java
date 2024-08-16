@@ -1,14 +1,19 @@
 package com.example.demo.proyek;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "proyek")
 public class Proyek {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "nama_proyek", nullable = false)
@@ -17,11 +22,13 @@ public class Proyek {
     @Column(name = "client", nullable = false)
     private String Client;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
     @Column(name = "tgl_mulai", nullable = false, columnDefinition = "DATETIME")
-    private Date TanggalMulai;
+    private LocalDateTime TanggalMulai;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
     @Column(name = "tgl_selesai", nullable = false, columnDefinition = "DATETIME")
-    private Date TanggalSelesai;
+    private LocalDateTime TanggalSelesai;
 
     @Column(name = "pimpinan_proyek", nullable = false)
     private String PimpinanProyek;
@@ -60,19 +67,19 @@ public class Proyek {
         Client = client;
     }
 
-    public Date getTanggalMulai () {
+    public LocalDateTime getTanggalMulai () {
         return TanggalMulai;
     }
 
-    public void setTanggalMulai (Date tanggalMulai) {
+    public void setTanggalMulai (LocalDateTime tanggalMulai) {
         TanggalMulai = tanggalMulai;
     }
 
-    public Date getTanggalSelesai () {
+    public LocalDateTime getTanggalSelesai () {
         return TanggalSelesai;
     }
 
-    public void setTanggalSelesai (Date tanggalSelesai) {
+    public void setTanggalSelesai (LocalDateTime tanggalSelesai) {
         TanggalSelesai = tanggalSelesai;
     }
 
