@@ -1,6 +1,7 @@
 package com.example.demo.proyek;
 
 import com.example.demo.DTOs.ProyekAndLokasi;
+import com.example.demo.DTOs.ProyekAndLokasis;
 import com.example.demo.DTOs.WithInfo;
 import com.example.demo.RequestBody.ProyekPost;
 import com.example.demo.lokasi.LokasiRepository;
@@ -23,13 +24,13 @@ public class ProyekController {
     private LokasiRepository lokasiRepository;
 
     @GetMapping("{id}")
-    public ResponseEntity<ProyekDTO> getProyek(@PathVariable("id") Long id){
-        ProyekDTO dto = service.getProyek(id);
-        return new ResponseEntity<ProyekDTO>(dto,HttpStatus.OK);
+    public ResponseEntity<ProyekAndLokasis> getProyek(@PathVariable("id") Long id){
+        ProyekAndLokasis dto = service.getProyek(id);
+        return new ResponseEntity<ProyekAndLokasis>(dto,HttpStatus.OK);
     }
     @GetMapping
-    public ResponseEntity<List<ProyekDTO>> getAllProyek(){
-        return new ResponseEntity<List<ProyekDTO>>(service.getAllProyek(), HttpStatus.OK);
+    public ResponseEntity<List<ProyekAndLokasis>> getAllProyek(){
+        return new ResponseEntity<List<ProyekAndLokasis>>(service.getAllProyek(), HttpStatus.OK);
     }
     @PostMapping
     public ResponseEntity<WithInfo<ProyekAndLokasi>> addNew(@RequestBody ProyekPost req){

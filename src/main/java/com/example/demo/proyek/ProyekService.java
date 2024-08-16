@@ -1,11 +1,13 @@
 package com.example.demo.proyek;
 
 import com.example.demo.DTOs.ProyekAndLokasi;
+import com.example.demo.DTOs.ProyekAndLokasis;
 import com.example.demo.exceptions.ResourceNotFound;
 import com.example.demo.helper.Mapper;
 import com.example.demo.lokasi.Lokasi;
 import com.example.demo.lokasi.LokasiRepository;
 import com.example.demo.proyek_lokasi.ProyekLokasi;
+import com.example.demo.proyek_lokasi.ProyekLokasiRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
@@ -27,19 +29,21 @@ public class ProyekService {
     @Autowired
     private LokasiRepository lokasiRepository;
     @Autowired
+    private ProyekLokasiRepository proyekLokasiRepository;
+    @Autowired
     private Mapper map;
     //@Autowired
    // private ProyekLokasiRepository bridgeRepository;
 
-    public ProyekDTO getProyek(Long id){
+    public ProyekAndLokasis getProyek(Long id){
         Proyek proyek = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFound("Proyek with id: " + id + " not found!"));
-        return map.map(proyek);
+        return map.toProyekAndLokasis(proyek);
     }
 
-    public List<ProyekDTO> getAllProyek(){
+    public List<ProyekAndLokasis> getAllProyek(){
         List<Proyek> proyeks = repository.findAll();
-        return map.map(proyeks);
+        return map.toProyekAndLokasis(proyeks);
     }
 
     public ProyekAndLokasi addNew(Proyek proyek, Long lokasiId){
@@ -48,6 +52,8 @@ public class ProyekService {
         ProyekLokasi proyekLokasi = new ProyekLokasi();
         proyekLokasi.setProyek(proyek);
         proyekLokasi.setLokasi(lokasi.get());
+        proyekLokasiRepository.save(proyekLokasi);
+
 
         return map.map(proyek, lokasi.get());
     }

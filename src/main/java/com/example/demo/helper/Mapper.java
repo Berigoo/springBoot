@@ -1,10 +1,12 @@
 package com.example.demo.helper;
 
 import com.example.demo.DTOs.ProyekAndLokasi;
+import com.example.demo.DTOs.ProyekAndLokasis;
 import com.example.demo.lokasi.Lokasi;
 import com.example.demo.lokasi.LokasiDTO;
 import com.example.demo.proyek.Proyek;
 import com.example.demo.proyek.ProyekDTO;
+import com.example.demo.proyek_lokasi.ProyekLokasi;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -61,9 +63,35 @@ public class Mapper {
         return dto;
     }
 
-   /* public List<ProyekAndLokasi> toProyekAndLokasi(List<Proyek> proyeks){
-        List<ProyekAndLokasi> dtos = new ArrayList<>();
-        for (int i = 0; i < proyeks.size(); i++) {
+    public List<LokasiDTO> toLokasiDtos(List<ProyekLokasi> proyekLokasis){
+        List<LokasiDTO> dtos = new ArrayList<>();
+        for (int i = 0; i < proyekLokasis.size(); i++) {
+            dtos.add(map(proyekLokasis.get(i).getLokasi()));
         }
-    }*/
+        return dtos;
+    }
+    public List<ProyekAndLokasis> toProyekAndLokasis(List<Proyek> proyeks){
+        List<ProyekAndLokasis> dtos = new ArrayList<>();
+        for (int i = 0; i < proyeks.size(); i++) {
+            ProyekAndLokasis dto = new ProyekAndLokasis();
+            Proyek proyek = proyeks.get(i);
+            List<LokasiDTO> lokasis = toLokasiDtos(proyek.getProyekLokasis());
+            ProyekDTO proyekDTO = map(proyek);
+
+            dto.setProyek(proyekDTO);
+            dto.setLokasis(lokasis);
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
+    public ProyekAndLokasis toProyekAndLokasis(Proyek proyek){
+        ProyekAndLokasis dto = new ProyekAndLokasis();
+        List<LokasiDTO> lokasis = toLokasiDtos(proyek.getProyekLokasis());
+        ProyekDTO proyekDTO = map(proyek);
+
+        dto.setProyek(proyekDTO);
+        dto.setLokasis(lokasis);
+        return dto;
+    }
 }
