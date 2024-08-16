@@ -1,6 +1,11 @@
 package com.example.demo.proyek;
 
+import com.example.demo.DTOs.ProyekAndLokasi;
 import com.example.demo.exceptions.ResourceNotFound;
+import com.example.demo.helper.Mapper;
+import com.example.demo.lokasi.Lokasi;
+import com.example.demo.lokasi.LokasiRepository;
+import com.example.demo.proyek_lokasi.ProyekLokasi;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
@@ -19,22 +24,32 @@ public class ProyekService {
 
     @Autowired
     private ProyekRepository repository;
+    @Autowired
+    private LokasiRepository lokasiRepository;
+    @Autowired
+    private Mapper map;
+    //@Autowired
+   // private ProyekLokasiRepository bridgeRepository;
 
     public ProyekDTO getProyek(Long id){
         Proyek proyek = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFound("Proyek with id: " + id + " not found!"));
-        return map(proyek);
+        return map.map(proyek);
     }
 
     public List<ProyekDTO> getAllProyek(){
         List<Proyek> proyeks = repository.findAll();
-        return maps(proyeks);
+        return map.map(proyeks);
     }
 
-    public ProyekDTO addNew(Proyek proyek){
-        repository.save(proyek);
+    public ProyekAndLokasi addNew(Proyek proyek, Long lokasiId){
+        Optional<Lokasi> lokasi = lokasiRepository.findById(lokasiId);
 
-        return map(proyek);
+        ProyekLokasi proyekLokasi = new ProyekLokasi();
+        proyekLokasi.setProyek(proyek);
+        proyekLokasi.setLokasi(lokasi.get());
+
+        return map.map(proyek, lokasi.get());
     }
 
     public ProyekDTO update(Proyek proyek, int id){
@@ -46,8 +61,7 @@ public class ProyekService {
         entity.get().setKeterangan(proyek.getKeterangan());
         entity.get().setPimpinanProyek(proyek.getPimpinanProyek());
 
-        repository.save(entity.get());
-        return map(entity.get());
+        return map.map(entity.get());
     }
 
     public boolean delete(int id){
@@ -58,25 +72,4 @@ public class ProyekService {
         return true;
     }
 
-    private ProyekDTO map(Proyek proyek){
-        ProyekDTO dto = new ProyekDTO();
-        dto.setId(proyek.getId());
-        dto.setNamaProyek(proyek.getNamaProyek());
-        dto.setClient(proyek.getClient());
-        dto.setTanggalMulai(proyek.getTanggalMulai());
-        dto.setTanggalSelesai(proyek.getTanggalSelesai());
-        dto.setPimpinanProyek(proyek.getPimpinanProyek());
-        dto.setKeterangan(proyek.getKeterangan());
-        dto.setCreatedAt(proyek.getCreatedAt());
-
-        return dto;
-    }
-
-    private List<ProyekDTO> maps(List<Proyek> proyeks){
-        List<ProyekDTO> dtos = new ArrayList<>();
-        for (int i = 0; i < proyeks.size(); i++) {
-            dtos.add(map(proyeks.get(i)));
-        }
-        return dtos;
-    }
 }

@@ -1,0 +1,8 @@
+CREATE TABLE lokasi(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nama_lokasi VARCHAR(255) NOT NULL,
+    negara VARCHAR(255) NOT NULL ,
+    provinsi VARCHAR(255) NOT NULL ,
+    kota VARCHAR(255) NOT NULL ,
+    created_at TIMESTAMP NOT NULL
+)

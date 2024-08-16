@@ -1,60 +1,32 @@
-package com.example.demo.proyek;
+package com.example.demo.RequestBody;
 
-import com.example.demo.proyek_lokasi.ProyekLokasi;
+import com.example.demo.proyek.Proyek;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Entity
-@Table(name = "proyek")
-public class Proyek {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Column(name = "nama_proyek", nullable = false)
+public class ProyekPost{
     private String NamaProyek;
 
-    @Column(name = "client", nullable = false)
     private String Client;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    @Column(name = "tgl_mulai", nullable = false, columnDefinition = "DATETIME")
     private LocalDateTime TanggalMulai;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    @Column(name = "tgl_selesai", nullable = false, columnDefinition = "DATETIME")
     private LocalDateTime TanggalSelesai;
 
-    @Column(name = "pimpinan_proyek", nullable = false)
     private String PimpinanProyek;
 
-    @Column(name = "keterangan", columnDefinition = "TEXT")
     private String Keterangan;
 
-    @CreationTimestamp
-    @Column(name = "created_at")
-    private Timestamp CreatedAt;
+    private Long LokasiId;
 
-    @OneToMany(mappedBy = "proyek")
-    private List<ProyekLokasi> proyekLokasis;
-
-
-    //
-    //
-    //
-
-    public int getId () {
-        return id;
-    }
-
-    public void setId (int id) {
-        this.id = id;
-    }
 
     public String getNamaProyek () {
         return NamaProyek;
@@ -104,19 +76,11 @@ public class Proyek {
         Keterangan = keterangan;
     }
 
-    public Timestamp getCreatedAt () {
-        return CreatedAt;
+    public Long getLokasiId () {
+        return LokasiId;
     }
 
-    public void setCreatedAt (Timestamp createdAt) {
-        CreatedAt = createdAt;
-    }
-
-    public List<ProyekLokasi> getProyekLokasis () {
-        return proyekLokasis;
-    }
-
-    public void setProyekLokasis (List<ProyekLokasi> proyekLokasis) {
-        this.proyekLokasis = proyekLokasis;
+    public void setLokasiId (Long lokasiId) {
+        LokasiId = lokasiId;
     }
 }

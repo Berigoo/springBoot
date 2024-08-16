@@ -1,6 +1,9 @@
 package com.example.demo.proyek;
 
+import com.example.demo.DTOs.ProyekAndLokasi;
 import com.example.demo.DTOs.WithInfo;
+import com.example.demo.RequestBody.ProyekPost;
+import com.example.demo.lokasi.LokasiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +19,8 @@ public class ProyekController {
     private ProyekService service;
     @Autowired
     private ProyekRepository repository;
+    @Autowired
+    private LokasiRepository lokasiRepository;
 
     @GetMapping("{id}")
     public ResponseEntity<ProyekDTO> getProyek(@PathVariable("id") Long id){
@@ -27,17 +32,26 @@ public class ProyekController {
         return new ResponseEntity<List<ProyekDTO>>(service.getAllProyek(), HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<WithInfo<ProyekDTO>> addNew(@RequestBody Proyek proyek){
-        WithInfo<ProyekDTO> dto = new WithInfo<>();
-        if(repository.existsById((long) proyek.getId())) {
-            dto.setInfo("Row Exists!");
+    public ResponseEntity<WithInfo<ProyekAndLokasi>> addNew(@RequestBody ProyekPost req){
+        WithInfo<ProyekAndLokasi> dto = new WithInfo<>();
+        Proyek proyek = new Proyek();
+        proyek.setNamaProyek(req.getNamaProyek());
+        proyek.setClient(req.getClient());
+        proyek.setKeterangan(req.getKeterangan());
+        proyek.setTanggalMulai(req.getTanggalMulai());
+        proyek.setTanggalSelesai(req.getTanggalSelesai());
+        proyek.setPimpinanProyek(req.getPimpinanProyek());
+        proyek = repository.save(proyek);
+
+        if(!lokasiRepository.existsById(req.getLokasiId())) {
+            dto.setInfo("Lokasi Not Found");
             dto.setData(null);
-            return new ResponseEntity<WithInfo<ProyekDTO>>(dto, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<WithInfo<ProyekAndLokasi>>(dto, HttpStatus.NOT_FOUND);
         }
 
         dto.setInfo("Row Created!");
-        dto.setData(service.addNew(proyek));
-        return new ResponseEntity<WithInfo<ProyekDTO>>(dto, HttpStatus.OK);
+        dto.setData(service.addNew(proyek, req.getLokasiId()));
+        return new ResponseEntity<WithInfo<ProyekAndLokasi>>(dto, HttpStatus.OK);
     }
     @PutMapping("{id}")
     public ResponseEntity<WithInfo<ProyekDTO>> update(@RequestBody Proyek proyek, @PathVariable("id") Long id){
