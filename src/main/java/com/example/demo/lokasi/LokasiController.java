@@ -42,7 +42,7 @@ public class LokasiController {
     @PutMapping("{id}")
     public ResponseEntity<WithInfo<LokasiDTO>> update(@RequestBody Lokasi lokasi, @PathVariable("id") Long id){
         WithInfo<LokasiDTO> dto = new WithInfo<>();
-        if(repository.existsById((long) lokasi.getId())) {
+        if(!repository.existsById((long) lokasi.getId())) {
             dto.setInfo("Row Not Exist!");
             dto.setData(null);
             return new ResponseEntity<WithInfo<LokasiDTO>>(dto, HttpStatus.NOT_FOUND);

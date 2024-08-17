@@ -2,6 +2,7 @@ package com.example.demo.proyek;
 
 import com.example.demo.DTOs.ProyekAndLokasi;
 import com.example.demo.DTOs.ProyekAndLokasis;
+import com.example.demo.RequestBody.ProyekUpdate;
 import com.example.demo.exceptions.ResourceNotFound;
 import com.example.demo.helper.Mapper;
 import com.example.demo.lokasi.Lokasi;
@@ -58,7 +59,7 @@ public class ProyekService {
         return map.map(proyek, lokasi.get());
     }
 
-    public ProyekDTO update(Proyek proyek, int id){
+    public ProyekDTO update(ProyekUpdate proyek, List<Long> lokasiIds, int id){
         Optional<Proyek> entity = repository.findById((long)id);
         entity.get().setNamaProyek(proyek.getNamaProyek());
         entity.get().setClient(proyek.getClient());
@@ -66,6 +67,25 @@ public class ProyekService {
         entity.get().setTanggalSelesai(proyek.getTanggalSelesai());
         entity.get().setKeterangan(proyek.getKeterangan());
         entity.get().setPimpinanProyek(proyek.getPimpinanProyek());
+        repository.save(entity.get());
+
+        List<ProyekLokasi> lokasis = proyekLokasiRepository.findByProyek(entity.get());
+        for (int i = 0; i < lokasiIds.size(); i++) {
+            Optional<Lokasi> lokasi = lokasiRepository.findById(lokasiIds.get(i));
+            if(!lokasi.isPresent()) return null;
+
+            if(lokasi.isPresent() && i < lokasis.size()) {
+                lokasis.get(i).setLokasi(lokasi.get());
+                continue;
+            }
+
+            ProyekLokasi proyekLokasi = new ProyekLokasi();
+            if(lokasi.isPresent()) {
+                proyekLokasi.setLokasi(lokasi.get());
+                proyekLokasi.setProyek(entity.get());
+                proyekLokasiRepository.save(proyekLokasi);
+            }
+        }
 
         return map.map(entity.get());
     }
