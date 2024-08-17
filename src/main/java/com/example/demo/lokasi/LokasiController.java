@@ -52,9 +52,9 @@ public class LokasiController {
         dto.setData(service.update(lokasi, Math.toIntExact(id)));
         return new ResponseEntity<WithInfo<LokasiDTO>>(dto, HttpStatus.OK);
     }
-    @DeleteMapping("{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") int id){
-        if(service.delete(id))
+    @DeleteMapping("{id}/{id2}")
+    public ResponseEntity<String> delete(@PathVariable("id") int id, @PathVariable("id2") int id2){
+        if(service.delete(id, id2))
             return new ResponseEntity<String>("Row Deleted!", HttpStatus.OK);
         else
             return new ResponseEntity<String>("Row Not Exist!", HttpStatus.NOT_FOUND);

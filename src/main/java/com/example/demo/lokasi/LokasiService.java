@@ -1,6 +1,10 @@
 package com.example.demo.lokasi;
 
 import com.example.demo.exceptions.ResourceNotFound;
+import com.example.demo.proyek.Proyek;
+import com.example.demo.proyek.ProyekRepository;
+import com.example.demo.proyek_lokasi.ProyekLokasi;
+import com.example.demo.proyek_lokasi.ProyekLokasiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +17,10 @@ public class LokasiService {
 
     @Autowired
     private LokasiRepository repository;
+    @Autowired
+    private ProyekLokasiRepository proyekLokasiRepository;
+    @Autowired
+    private ProyekRepository proyekRepository;
 
     public LokasiDTO getLokasi(Long id){
         Lokasi lokasi = repository.findById(id)
@@ -42,11 +50,16 @@ public class LokasiService {
         return map(entity.get());
     }
 
-    public boolean delete(int id){
-        Optional<Lokasi> lokasi = repository.findById((long) id);
-        if(!lokasi.isPresent()) return false;
+    public boolean delete(int id, int id2){
+        Optional<Proyek> proyek = proyekRepository.findById((long) id);
+        if(proyek.isEmpty()) return false;
+        Optional<Lokasi> lokasi = repository.findById((long) id2);
+        if(lokasi.isEmpty()) return false;
 
-        repository.delete(lokasi.get());
+        ProyekLokasi proyekLokasi = proyekLokasiRepository.findByProyekAndLokasi(proyek.get(), lokasi.get());
+        if(proyekLokasi == null) return false;
+
+        proyekLokasiRepository.delete(proyekLokasi);
         return true;
     }
 

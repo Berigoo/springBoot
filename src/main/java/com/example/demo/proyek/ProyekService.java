@@ -71,6 +71,7 @@ public class ProyekService {
 
         List<ProyekLokasi> lokasis = proyekLokasiRepository.findByProyek(entity.get());
         for (int i = 0; i < lokasiIds.size(); i++) {
+            if(lokasiIds.get(i) == null) continue;
             Optional<Lokasi> lokasi = lokasiRepository.findById(lokasiIds.get(i));
             if(!lokasi.isPresent()) return null;
 
