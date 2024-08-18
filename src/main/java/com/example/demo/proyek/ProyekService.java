@@ -80,11 +80,24 @@ public class ProyekService {
                 continue;
             }
 
-            ProyekLokasi proyekLokasi = new ProyekLokasi();
-            if(lokasi.isPresent()) {
-                proyekLokasi.setLokasi(lokasi.get());
-                proyekLokasi.setProyek(entity.get());
-                proyekLokasiRepository.save(proyekLokasi);
+            boolean isDouble = false;
+            for (int j = 0; j < lokasis.size(); j++) {
+                Long a = lokasiIds.get(i);
+                int b = lokasis.get(j).getLokasi().getId();
+                if(a == b){
+                    isDouble = true;
+                    break;
+                }
+            }
+            if (!isDouble) {
+                ProyekLokasi proyekLokasi = new ProyekLokasi();
+                if (lokasi.isPresent()) {
+                    proyekLokasi.setLokasi(lokasi.get());
+                    proyekLokasi.setProyek(entity.get());
+                    proyekLokasiRepository.save(proyekLokasi);
+                }
+            }else{
+                return null;
             }
         }
 

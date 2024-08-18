@@ -70,7 +70,7 @@ public class ProyekController {
         if(dto.getData() != null) {
             return new ResponseEntity<WithInfo<ProyekDTO>>(dto, HttpStatus.OK);
         }else{
-            dto.setInfo("Row Failed to Update!");
+            dto.setInfo("Lokasi id(s) not found! or Lokasi has been assign");
             return new ResponseEntity<WithInfo<ProyekDTO>>(dto, HttpStatus.NOT_FOUND);
         }
     }
